@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>ANOA TIC-TAC</title>
+  <link href="https://fonts.googleapis.com/css?family=Nova+Mono" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+  <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <header>
+    <h1>ANOA TIC-TAC</h1>
+  </header>
+  <audio id="playMusic" autoplay loop="true">
+    <source src="https://drive.google.com/uc?export=download&id=1SeLDhw8eb6mtAGg4pG0xPGKWDcu2mfPH" type="audio/mpeg">
+  </audio>
+  <section id="contentVue">
+    <div id="btnOptionsParent">
+      <div id="btnSound">
+        <i class="fa fa-volume-up" aria-hidden="true"></i>&nbsp;Music&nbsp;
+      </div>
+      <div id="btnOptionsChild" @click="backToOptions()">
+        <i class="fa fa-cog" aria-hidden="true"></i>&nbsp;New Game
+      </div>
+      <div id="optionsOverlay"></div>
+    </div>
+    <!-- app modal -->
+    <div id="modal" class="modal-vue">
+      <!-- overlay -->
+      <div class="overlay" v-if="showModal"></div>
+      <!-- modal -->
+      <div class="modal" v-if="showModal">
+        <div class='modalGrid center'>
+          <div class="vs">
+            <img src="http://res.cloudinary.com/azametzin/image/upload/v1507661608/Tic-Tac-Toe/vs.png" />
+          </div>
+          <div class="options">
+            <h2>Pilihan</h2>
+          </div>
+          <div class="box play1">Pemain 1</div>
+          <div class="box play2">
+            <div id="player2">
+              <span id='selMarkPlayer2'>
+                <i class="fa fa-caret-right" aria-hidden="true"></i>
+              </span>&nbsp;<span id="player2Select">Pemain 2</span>
+            </div>
+            <div id="cpu">
+              <span id='selMarkCPU'>
+                <i class="fa fa-caret-right" aria-hidden="true"></i>
+              </span>&nbsp;<span id="cpuSelect">Komputer</span>
+            </div>
+          </div>
+          <div class="box nick1">
+            <input id="nick1Input" type="text" name="nick1" placeholder="Nickname" maxlength="8" pattern="[a-zA-Z0-9-]+">
+          </div>
+          <div class="box nick2">
+            <input id="nick2Input" type="text" name="nick2" placeholder="Nickname" maxlength="8" pattern="[a-zA-Z0-9-]+">
+          </div>
+          <div class="sign1">
+            <i class="fa fa-circle-o" aria-hidden="true"></i>
+          </div>
+          <div class="sign2">
+            <i class="fa fa-times" aria-hidden="true"></i>
+          </div>
+          <div class="exchangingAndOK">
+            <i id="exchangeBtn" class="fa fa-exchange" aria-hidden="true"></i><br><br>
+            <span id='okBtn' @click="okButtonClicked()">OKE</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <section class="container">
+      <div class="playerSide player1-Title">
+        <div id="player-1" class="title-players"></div>
+      </div>
+      <div class="item item-1">
+        <div id="square1" class="squares" data-mark="1"></div>
+      </div>
+      <div class="item item-2">
+        <div id="square2" class="squares" data-mark="2"></div>
+      </div>
+      <div class="item item-3">
+        <div id="square3" class="squares" data-mark="3"></div>
+      </div>
+      <div class="playerSide player2-Title">
+        <div id="player-2" class="title-players"></div>
+      </div>
+      <div id="player1-info" class="playerSide player1-Avatar">
+        <div id="player1-info-inside"></div>
+      </div>
+      <div class="item item-4">
+        <div id="square4" class="squares" data-mark="4"></div>
+      </div>
+      <div class="item item-5">
+        <div id="square5" class="squares" data-mark="5"></div>
+      </div>
+      <div class="item item-6">
+        <div id="square6" class="squares" data-mark="6"></div>
+      </div>
+      <div id="player2-info" class="playerSide player2-Avatar">
+        <div id="player2-info-inside"></div>
+      </div>
+      <div class="playerSide player1-Msg">
+        <div id="player-1-Msg" class="players-msg"></div>
+      </div>
+      <div class="item item-7">
+        <div id="square7" class="squares" data-mark="7"></div>
+      </div>
+      <div class="item item-8">
+        <div id="square8" class="squares" data-mark="8"></div>
+      </div>
+      <div class="item item-9">
+        <div id="square9" class="squares" data-mark="9"></div>
+      </div>
+      <div class="playerSide player2-Msg">
+        <div id="player-2-Msg" class="players-msg"></div>
+      </div>
+    </section>
+  </section>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.4/vue.min.js'></script>
+  <script src="./script.js"></script>
+  <script>
+    // Menambahkan event listener saat dokumen HTML selesai dimuat
+    document.addEventListener('DOMContentLoaded', function () {
+      // Mengambil elemen tombol musik
+      var btnSound = document.getElementById('btnSound');
+
+      // Mendapatkan elemen audio
+      var audioElement = document.getElementById('playMusic');
+
+      // Menambahkan event listener saat tombol musik diklik
+      btnSound.addEventListener('click', function () {
+        // Memeriksa apakah audio sedang diputar atau dijeda
+        if (audioElement.paused) {
+          // Memulai pemutaran audio
+          audioElement.play();
+        } else {
+          // Jeda pemutaran audio
+          audioElement.pause();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

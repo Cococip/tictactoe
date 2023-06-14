@@ -1,0 +1,391 @@
+body {
+	  background-color: #404040;
+    font-family: 'Nova Mono', monospace;
+}
+
+h1 {
+    text-align: center;
+    margin: 12px 0 20px;
+    color: #ffffff;;
+    font-size: 3em;
+}
+
+input {
+    width: 90%;
+    background-color: black;
+    color: #fff;
+    font-size: 0.9em;
+    height: 1.2em;
+    text-align: center;
+    outline:0;
+    transition: 200ms;
+    text-decoration: none;
+}
+
+input:focus { 
+    border: 1px solid #f8f8f8;
+  	-webkit-filter: drop-shadow( 0px 0px 3px rgb(255, 255, 255) );
+  	transition: 200ms;
+}
+
+.avatar-icon {
+  	-webkit-filter: drop-shadow( 1px 1px 7px rgb(0, 0, 0) );
+  	width: 100px;
+}
+
+.container {
+    display: grid;
+    justify-content: center;	
+    align-content: center;
+    grid-template-columns: 260px 150px 150px 150px 260px;
+    grid-template-rows: 150px 150px 150px;
+    grid-gap: 0.5rem;
+}
+
+.item {
+  	background-color: #000;
+  	text-align: center;
+    background-image: linear-gradient(130deg, #000000 0%, #273a12 85%, #1f2d24 100%);
+  	color: #fff;
+  	border-radius: 4px;
+  	border: 2px solid #171717;
+    transition: 0.3s;
+}
+
+.item:hover {
+    background-image: linear-gradient(130deg, #10130f 0%, #3a7520 85%, #345821 100%);
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.playerSide {
+	background-color: #000;
+	text-align: center;
+	background-image: linear-gradient(130deg, #000000 0%, #071d0a 85%, #020a05 100%);
+	color: #fff;
+	border-radius: 4px;
+	border: 2px solid #171717;
+    transition: 0.3s;
+}
+
+.squares {
+    text-align: center;
+    padding: 20% 0;
+    font-size: 4em;
+    text-overflow: clip;
+    white-space: pre;
+}
+
+#square1, #square2, #square3, #square4, #square5, #square6, #square7, #square8, #square9 {
+  	transition: 1000ms;
+} 
+
+.title-players, .players-msg, .nick {
+    text-align: center;
+    padding: 8% 0;
+    font-size: 1.5em;
+    text-overflow: clip;
+    white-space: pre;
+}
+
+.modal-vue .overlay {
+	 position: fixed;
+	 z-index: 9998;
+	 top: 0;
+	 left: 0;
+	 width: 100%;
+	 height: 100%;
+	 background-color: rgba(0, 0, 0, .6);
+}
+
+.modal-vue .modal {
+    color: #ffffff;
+    position: absolute;
+    width: 250px;
+    z-index: 9999;
+    padding: 50px 30px;
+    background-color: black;
+    right: 0;
+    left: 0;
+    margin: auto;
+    border-radius: 12px;
+    top: 120px;
+    font-family: Lucida Console;
+}
+
+.modal-vue .close {
+  	position: absolute;
+  	top: 10px;
+  	right: 10px;
+}
+
+.center {
+  	text-align: center;
+}
+
+.bold {
+  	font-weight: 600;
+}
+
+.modalGrid {
+    display: grid;
+    justify-content: center;	
+    align-content: center;
+    grid-template-columns: repeat(6, 40px);
+    grid-gap: 5px;
+    grid-template-rows: auto;
+    font-size: 1.2em;
+}
+
+.vs {
+    position: absolute;
+    right: 0;
+    left: -2px;
+    margin: auto;
+    top: 92px;
+    width: 32px;
+    height: 32px;
+    opacity: 0.2;
+}
+
+.box {
+  	padding: 5px;
+}
+
+.options {
+    grid-column: 1/7;
+    color: #fff;
+}
+
+.options h2 {
+    margin: -20px auto 15px;
+    font-size: 1.8em;
+    font-family: monospace;
+}
+
+.play1 {
+    grid-column: 1/4;
+	grid-row: 2;
+	font-family: sans-serif;
+}
+
+.play2 {
+    grid-column: 4/7;
+    grid-row: 2;
+    font-family: sans-serif;
+}
+
+.nick1 {
+    grid-column: 1/4;
+    grid-row: 3;
+}
+
+.nick2 {
+    grid-column: 4/7;
+    grid-row: 3;
+}
+
+.sign1 {
+    margin-top: 5px;
+    grid-column: 1/4;
+    grid-row: 4;
+    font-size: 1.6em;
+}
+
+.sign2 {
+  margin-top: 5px;
+  grid-column: 4/7;
+  grid-row: 4;
+  font-size: 1.6em;
+}
+
+.exchangingAndOK {
+  position: absolute;
+  right: 0;
+  left: 0;
+  margin: auto;
+  top: 190px;
+  color: #bbb;
+  font-size: 1.2em;
+}
+
+#exchangeBtn:hover {
+	cursor: pointer;
+	color: white;
+	transition: 200ms;
+}
+
+#okBtn {
+	background-color: #000000;
+	padding: 15px;
+	border-radius: 15px;
+	width: 50px;
+	font-size: 0.8em;
+	font-family: sans-serif;
+	color: #7fa77a;
+	transition: 250ms;
+}
+
+#cpu {
+	color: #333;
+}
+
+#player2Select:hover, #cpuSelect:hover {
+	cursor: pointer;
+}
+
+#okBtn:hover {
+	color: white;
+	font-size: 0.84em;
+	transition: 250ms;
+	cursor: pointer;
+}
+
+#selMarkPlayer2 {
+	color: #ffffff;
+}
+
+#player1-info-inside, #player2-info-inside, #player-1, #player-2 {
+	display: none;
+}
+
+#btnOptionsParent {
+	margin-left: 25%;
+	margin-bottom: 10px;
+	height: 25px;
+	width: 100%;
+	display: inline-flex;
+	color: rgba(255, 255, 255, 0.75);
+	position: relative;
+}
+
+#btnOptionsChild {
+	display: none;
+	transition: 500ms;
+	position: relative;
+}
+
+#btnSound {
+	transition: 500ms;
+	position: relative;
+}
+
+#btnOptionsChild:hover, #btnSound:hover {
+	cursor: pointer;
+	color: white;
+	transition: 500ms;
+}
+
+#optionsOverlay {
+	z-index: 100;
+	height: 100%;
+	width: 100%;
+	position: absolute;
+	top: 0;
+	opacity: 0;
+}
+
+@media (max-width: 1024px) {
+	.container {
+		grid-template-columns: 220px 120px 120px 120px 220px;
+		grid-template-rows: 120px 120px 120px;
+		grid-gap: 0.4rem;
+	}
+
+	.squares {
+		font-size: 2.8rem;
+		padding: 25% 0;
+	}
+
+	.avatar-icon {
+		width: 82px;
+	}
+
+	.title-players, .players-msg, .nick {
+		font-size: 1.25em;
+	}
+
+	#btnOptionsParent {
+		font-size: 0.95em;
+		height: 18px;
+	}
+}
+
+@media (max-width: 768px) {
+	.container {
+		grid-template-columns: 180px 100px 100px 100px 180px;
+		grid-template-rows: 100px 100px 100px;
+		grid-gap: 0.3rem;
+	}
+
+	.squares {
+		font-size: 2.8rem;
+		padding: 21% 0;
+	}
+
+	.avatar-icon {
+		width: 70px;
+	}
+
+	.title-players, .players-msg, .nick {
+		font-size: 1em;
+	}
+
+	#btnOptionsParent {
+		font-size: 0.9em;
+		height: 16px;
+	}
+}
+
+@media (max-width: 600px) {
+	.container {
+		grid-template-columns: 150px 70px 70px 70px 150px;
+		grid-template-rows: 70px 70px 70px;
+		grid-gap: 0.5em;
+	}
+
+	.squares {
+	  	font-size: 2.2rem;
+	  	padding: 18% 0;
+	}
+
+	.avatar-icon {
+	  	width: 42px;
+	}
+
+	.title-players, .players-msg, .nick {
+	  	font-size: 0.7em;
+	}
+	#btnOptionsParent {
+	  	font-size: 0.7em;
+	  	height: 14px;
+	}
+}
+
+@media (max-width: 500px) {
+	.container {
+		grid-template-columns: 80px 50px 50px 50px 80px;
+		grid-template-rows: 50px 50px 50px;
+		grid-gap: 0.1em;
+	}
+
+	.squares {
+		font-size: 1.5rem;
+	}
+
+	.avatar-icon {
+		width: 26px;
+	}
+
+	.title-players, .players-msg, .nick {
+		font-size: 0.5em;
+	}
+
+	h1 {
+		font-size: 2.2em;
+	}  
+	#btnOptionsParent {
+		font-size: 0.5em;
+		height: 8px;
+	}
+}
