@@ -1,147 +1,327 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>ANOA TIC-TAC</title>
-  <link href="https://fonts.googleapis.com/css?family=Nova+Mono" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
-  <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ANOA TIC-TAC - Game Tic Tac Toe modern dengan grafis menarik dan musik latar. Mainkan melawan komputer atau teman!">
+  <meta name="keywords" content="tic tac toe, game, permainan, anoa, online game, browser game">
+  <meta name="author" content="ANOA Games">
+  <meta name="theme-color" content="#404040">
+  
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="ANOA TIC-TAC - Game Tic Tac Toe Modern">
+  <meta property="og:description" content="Game Tic Tac Toe modern dengan grafis menarik dan musik latar. Mainkan melawan komputer atau teman!">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://res.cloudinary.com/azametzin/image/upload/v1507661608/Tic-Tac-Toe/vs.png">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiBmaWxsPSIjNDA0MDQwIi8+CjxwYXRoIGQ9Ik04IDhMMjQgMjRNMjQgOEw4IDI0IiBzdHJva2U9IiNGRkZGRkYiIHN0cm9rZS13aWR0aD0iMiIvPgo8L3N2Zz4K">
+  
+  <title>ANOA TIC-TAC - Game Tic Tac Toe Modern</title>
+  
+  <!-- External Stylesheets -->
+  <link href="https://fonts.googleapis.com/css2?family=Nova+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-  <header>
-    <h1>ANOA TIC-TAC</h1>
+  <!-- Skip Navigation Link for Accessibility -->
+  <a href="#main-content" class="skip-nav" aria-label="Langsung ke konten utama">Langsung ke konten utama</a>
+  
+  <!-- Header Section -->
+  <header role="banner">
+    <h1 id="game-title">ANOA TIC-TAC</h1>
+    <p class="game-subtitle" aria-describedby="game-title">Game Tic Tac Toe Modern dengan Musik</p>
   </header>
-  <audio id="playMusic" autoplay loop="true">
+
+  <!-- Background Music -->
+  <audio id="playMusic" preload="metadata" loop aria-label="Musik latar belakang">
     <source src="https://drive.google.com/uc?export=download&id=1SeLDhw8eb6mtAGg4pG0xPGKWDcu2mfPH" type="audio/mpeg">
+    <p>Browser Anda tidak mendukung audio HTML5.</p>
   </audio>
-  <section id="contentVue">
-    <div id="btnOptionsParent">
-      <div id="btnSound">
-        <i class="fa fa-volume-up" aria-hidden="true"></i>&nbsp;Music&nbsp;
-      </div>
-      <div id="btnOptionsChild" @click="backToOptions()">
-        <i class="fa fa-cog" aria-hidden="true"></i>&nbsp;New Game
-      </div>
-      <div id="optionsOverlay"></div>
-    </div>
-    <!-- app modal -->
-    <div id="modal" class="modal-vue">
-      <!-- overlay -->
-      <div class="overlay" v-if="showModal"></div>
-      <!-- modal -->
-      <div class="modal" v-if="showModal">
-        <div class='modalGrid center'>
-          <div class="vs">
-            <img src="http://res.cloudinary.com/azametzin/image/upload/v1507661608/Tic-Tac-Toe/vs.png" />
-          </div>
-          <div class="options">
-            <h2>Pilihan</h2>
-          </div>
-          <div class="box play1">Pemain 1</div>
-          <div class="box play2">
-            <div id="player2">
-              <span id='selMarkPlayer2'>
-                <i class="fa fa-caret-right" aria-hidden="true"></i>
-              </span>&nbsp;<span id="player2Select">Pemain 2</span>
+
+  <!-- Main Content -->
+  <main id="main-content" aria-label="Area permainan utama">
+    <section id="contentVue" aria-live="polite">
+      <!-- Game Controls -->
+      <nav id="btnOptionsParent" role="toolbar" aria-label="Kontrol permainan">
+        <button 
+          id="btnSound" 
+          type="button"
+          aria-label="Toggle musik latar belakang"
+          title="Nyalakan/matikan musik"
+        >
+          <i class="fa fa-volume-up" aria-hidden="true"></i>&nbsp;Musik&nbsp;
+        </button>
+        <button 
+          id="btnOptionsChild" 
+          type="button"
+          @click="backToOptions()"
+          aria-label="Mulai permainan baru"
+          title="Kembali ke pengaturan"
+          style="display: none;"
+        >
+          <i class="fa fa-cog" aria-hidden="true"></i>&nbsp;Permainan Baru
+        </button>
+        <div id="optionsOverlay" aria-hidden="true"></div>
+      </nav>
+
+      <!-- Game Settings Modal -->
+      <div id="modal" class="modal-vue" role="dialog" aria-labelledby="modal-title" aria-modal="true">
+        <!-- Modal Overlay -->
+        <div class="overlay" v-if="showModal" aria-hidden="true"></div>
+        
+        <!-- Modal Content -->
+        <div class="modal" v-if="showModal">
+          <div class="modalGrid center">
+            <div class="vs" aria-hidden="true">
+              <img src="http://res.cloudinary.com/azametzin/image/upload/v1507661608/Tic-Tac-Toe/vs.png" alt="Versus symbol" />
             </div>
-            <div id="cpu">
-              <span id='selMarkCPU'>
-                <i class="fa fa-caret-right" aria-hidden="true"></i>
-              </span>&nbsp;<span id="cpuSelect">Komputer</span>
+            
+            <div class="options">
+              <h2 id="modal-title">Pengaturan Permainan</h2>
             </div>
-          </div>
-          <div class="box nick1">
-            <input id="nick1Input" type="text" name="nick1" placeholder="Nickname" maxlength="8" pattern="[a-zA-Z0-9-]+">
-          </div>
-          <div class="box nick2">
-            <input id="nick2Input" type="text" name="nick2" placeholder="Nickname" maxlength="8" pattern="[a-zA-Z0-9-]+">
-          </div>
-          <div class="sign1">
-            <i class="fa fa-circle-o" aria-hidden="true"></i>
-          </div>
-          <div class="sign2">
-            <i class="fa fa-times" aria-hidden="true"></i>
-          </div>
-          <div class="exchangingAndOK">
-            <i id="exchangeBtn" class="fa fa-exchange" aria-hidden="true"></i><br><br>
-            <span id='okBtn' @click="okButtonClicked()">OKE</span>
+            
+            <div class="box play1">
+              <label for="nick1Input">Pemain 1</label>
+            </div>
+            
+            <div class="box play2">
+              <fieldset>
+                <legend class="sr-only">Pilih lawan</legend>
+                <div id="player2">
+                  <button 
+                    type="button"
+                    id="player2Select"
+                    aria-pressed="true"
+                    aria-describedby="player2-desc"
+                  >
+                    <span id="selMarkPlayer2" aria-hidden="true">
+                      <i class="fa fa-caret-right"></i>
+                    </span>&nbsp;<span>Pemain 2</span>
+                  </button>
+                  <span id="player2-desc" class="sr-only">Bermain melawan pemain lain</span>
+                </div>
+                <div id="cpu">
+                  <button 
+                    type="button"
+                    id="cpuSelect"
+                    aria-pressed="false"
+                    aria-describedby="cpu-desc"
+                  >
+                    <span id="selMarkCPU" aria-hidden="true">
+                      <i class="fa fa-caret-right"></i>
+                    </span>&nbsp;<span>Komputer</span>
+                  </button>
+                  <span id="cpu-desc" class="sr-only">Bermain melawan komputer</span>
+                </div>
+              </fieldset>
+            </div>
+            
+            <div class="box nick1">
+              <label for="nick1Input" class="sr-only">Nama Pemain 1</label>
+              <input 
+                id="nick1Input" 
+                type="text" 
+                name="nick1" 
+                placeholder="Nama Pemain 1" 
+                maxlength="8" 
+                pattern="[a-zA-Z0-9-]+"
+                aria-describedby="nick1-help"
+              >
+              <span id="nick1-help" class="sr-only">Masukkan nama untuk pemain 1, maksimal 8 karakter</span>
+            </div>
+            
+            <div class="box nick2">
+              <label for="nick2Input" class="sr-only">Nama Pemain 2</label>
+              <input 
+                id="nick2Input" 
+                type="text" 
+                name="nick2" 
+                placeholder="Nama Pemain 2" 
+                maxlength="8" 
+                pattern="[a-zA-Z0-9-]+"
+                aria-describedby="nick2-help"
+              >
+              <span id="nick2-help" class="sr-only">Masukkan nama untuk pemain 2, maksimal 8 karakter</span>
+            </div>
+            
+            <div class="sign1" role="img" aria-label="Simbol lingkaran untuk pemain 1">
+              <i class="fa fa-circle-o" aria-hidden="true"></i>
+            </div>
+            
+            <div class="sign2" role="img" aria-label="Simbol silang untuk pemain 2">
+              <i class="fa fa-times" aria-hidden="true"></i>
+            </div>
+            
+            <div class="exchangingAndOK">
+              <button 
+                id="exchangeBtn" 
+                type="button"
+                aria-label="Tukar simbol pemain"
+                title="Klik untuk menukar simbol X dan O"
+              >
+                <i class="fa fa-exchange" aria-hidden="true"></i>
+              </button>
+              <br><br>
+              <button 
+                id="okBtn" 
+                type="button"
+                @click="okButtonClicked()"
+                aria-label="Mulai permainan"
+              >
+                MULAI
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <section class="container">
-      <div class="playerSide player1-Title">
-        <div id="player-1" class="title-players"></div>
-      </div>
-      <div class="item item-1">
-        <div id="square1" class="squares" data-mark="1"></div>
-      </div>
-      <div class="item item-2">
-        <div id="square2" class="squares" data-mark="2"></div>
-      </div>
-      <div class="item item-3">
-        <div id="square3" class="squares" data-mark="3"></div>
-      </div>
-      <div class="playerSide player2-Title">
-        <div id="player-2" class="title-players"></div>
-      </div>
-      <div id="player1-info" class="playerSide player1-Avatar">
-        <div id="player1-info-inside"></div>
-      </div>
-      <div class="item item-4">
-        <div id="square4" class="squares" data-mark="4"></div>
-      </div>
-      <div class="item item-5">
-        <div id="square5" class="squares" data-mark="5"></div>
-      </div>
-      <div class="item item-6">
-        <div id="square6" class="squares" data-mark="6"></div>
-      </div>
-      <div id="player2-info" class="playerSide player2-Avatar">
-        <div id="player2-info-inside"></div>
-      </div>
-      <div class="playerSide player1-Msg">
-        <div id="player-1-Msg" class="players-msg"></div>
-      </div>
-      <div class="item item-7">
-        <div id="square7" class="squares" data-mark="7"></div>
-      </div>
-      <div class="item item-8">
-        <div id="square8" class="squares" data-mark="8"></div>
-      </div>
-      <div class="item item-9">
-        <div id="square9" class="squares" data-mark="9"></div>
-      </div>
-      <div class="playerSide player2-Msg">
-        <div id="player-2-Msg" class="players-msg"></div>
-      </div>
+
+      <!-- Game Board -->
+      <section class="container" role="application" aria-label="Papan permainan Tic Tac Toe">
+        <!-- Player 1 Info -->
+        <div class="playerSide player1-Title" aria-live="polite">
+          <div id="player-1" class="title-players" aria-label="Informasi pemain 1"></div>
+        </div>
+        
+        <!-- Game Grid -->
+        <div class="item item-1">
+          <button 
+            id="square1" 
+            class="squares" 
+            data-mark="1"
+            aria-label="Kotak 1"
+            aria-describedby="square1-status"
+          ></button>
+          <span id="square1-status" class="sr-only">Kosong</span>
+        </div>
+        
+        <div class="item item-2">
+          <button 
+            id="square2" 
+            class="squares" 
+            data-mark="2"
+            aria-label="Kotak 2"
+            aria-describedby="square2-status"
+          ></button>
+          <span id="square2-status" class="sr-only">Kosong</span>
+        </div>
+        
+        <div class="item item-3">
+          <button 
+            id="square3" 
+            class="squares" 
+            data-mark="3"
+            aria-label="Kotak 3"
+            aria-describedby="square3-status"
+          ></button>
+          <span id="square3-status" class="sr-only">Kosong</span>
+        </div>
+
+        <!-- Player 2 Info -->
+        <div class="playerSide player2-Title" aria-live="polite">
+          <div id="player-2" class="title-players" aria-label="Informasi pemain 2"></div>
+        </div>
+
+        <!-- Player 1 Avatar -->
+        <div id="player1-info" class="playerSide player1-Avatar">
+          <div id="player1-info-inside" aria-label="Avatar dan nama pemain 1"></div>
+        </div>
+        
+        <div class="item item-4">
+          <button 
+            id="square4" 
+            class="squares" 
+            data-mark="4"
+            aria-label="Kotak 4"
+            aria-describedby="square4-status"
+          ></button>
+          <span id="square4-status" class="sr-only">Kosong</span>
+        </div>
+        
+        <div class="item item-5">
+          <button 
+            id="square5" 
+            class="squares" 
+            data-mark="5"
+            aria-label="Kotak 5"
+            aria-describedby="square5-status"
+          ></button>
+          <span id="square5-status" class="sr-only">Kosong</span>
+        </div>
+        
+        <div class="item item-6">
+          <button 
+            id="square6" 
+            class="squares" 
+            data-mark="6"
+            aria-label="Kotak 6"
+            aria-describedby="square6-status"
+          ></button>
+          <span id="square6-status" class="sr-only">Kosong</span>
+        </div>
+
+        <!-- Player 2 Avatar -->
+        <div id="player2-info" class="playerSide player2-Avatar">
+          <div id="player2-info-inside" aria-label="Avatar dan nama pemain 2"></div>
+        </div>
+
+        <!-- Player Messages -->
+        <div class="playerSide player1-Msg" aria-live="assertive">
+          <div id="player-1-Msg" class="players-msg" aria-label="Pesan untuk pemain 1"></div>
+        </div>
+        
+        <div class="item item-7">
+          <button 
+            id="square7" 
+            class="squares" 
+            data-mark="7"
+            aria-label="Kotak 7"
+            aria-describedby="square7-status"
+          ></button>
+          <span id="square7-status" class="sr-only">Kosong</span>
+        </div>
+        
+        <div class="item item-8">
+          <button 
+            id="square8" 
+            class="squares" 
+            data-mark="8"
+            aria-label="Kotak 8"
+            aria-describedby="square8-status"
+          ></button>
+          <span id="square8-status" class="sr-only">Kosong</span>
+        </div>
+        
+        <div class="item item-9">
+          <button 
+            id="square9" 
+            class="squares" 
+            data-mark="9"
+            aria-label="Kotak 9"
+            aria-describedby="square9-status"
+          ></button>
+          <span id="square9-status" class="sr-only">Kosong</span>
+        </div>
+        
+        <div class="playerSide player2-Msg" aria-live="assertive">
+          <div id="player-2-Msg" class="players-msg" aria-label="Pesan untuk pemain 2"></div>
+        </div>
+      </section>
     </section>
-  </section>
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
-  <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.4/vue.min.js'></script>
+  </main>
+
+  <!-- Footer -->
+  <footer role="contentinfo">
+    <p>&copy; 2024 ANOA Games. Game Tic Tac Toe Modern.</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.7.14/vue.min.js" integrity="sha512-LIZBHf7cFJMvhbkD7Wqz+7BfmKjDgJWMJKJxPQivMynKSkz8LXPITy9OMBGv8Mj7QjGj1Lv3+jUKhvlkJZQVLg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="./script.js"></script>
-  <script>
-    // Menambahkan event listener saat dokumen HTML selesai dimuat
-    document.addEventListener('DOMContentLoaded', function () {
-      // Mengambil elemen tombol musik
-      var btnSound = document.getElementById('btnSound');
 
-      // Mendapatkan elemen audio
-      var audioElement = document.getElementById('playMusic');
-
-      // Menambahkan event listener saat tombol musik diklik
-      btnSound.addEventListener('click', function () {
-        // Memeriksa apakah audio sedang diputar atau dijeda
-        if (audioElement.paused) {
-          // Memulai pemutaran audio
-          audioElement.play();
-        } else {
-          // Jeda pemutaran audio
-          audioElement.pause();
-        }
-      });
-    });
-  </script>
+  <!-- Remove the duplicate audio control script since it's now handled in script.js -->
 </body>
 </html>
