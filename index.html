@@ -1,8 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>ANOA TIC-TAC</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ANOA TIC-TAC-TOE - Permainan Tic Tac Toe</title>
+  <meta name="description" content="Permainan Tic Tac Toe dengan AI cerdas dan musik latar">
+  
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Nova+Mono" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
   <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'>
@@ -10,52 +14,60 @@
 </head>
 <body>
   <header>
-    <h1>ANOA TIC-TAC</h1>
+    <h1>ANOA TIC-TAC-TOE</h1>
   </header>
-  <audio id="playMusic" autoplay loop="true">
+
+  <!-- Audio Element -->
+  <audio id="playMusic" preload="auto">
     <source src="https://drive.google.com/uc?export=download&id=1SeLDhw8eb6mtAGg4pG0xPGKWDcu2mfPH" type="audio/mpeg">
+    <p>Browser Anda tidak mendukung elemen audio.</p>
   </audio>
-  <section id="contentVue">
-    <div id="btnOptionsParent">
-      <div id="btnSound">
-        <i class="fa fa-volume-up" aria-hidden="true"></i>&nbsp;Music&nbsp;
-      </div>
-      <div id="btnOptionsChild" @click="backToOptions()">
-        <i class="fa fa-cog" aria-hidden="true"></i>&nbsp;New Game
-      </div>
-      <div id="optionsOverlay"></div>
+
+  <main id="contentVue">
+    <!-- Game Controls -->
+    <div id="btnOptionsParent" class="game-controls">
+      <button id="btnSound" class="control-btn" aria-label="Toggle musik">
+        <i class="fa fa-volume-up" aria-hidden="true"></i>
+        <span>Musik</span>
+      </button>
+      <button id="btnOptionsChild" class="control-btn" @click="backToOptions()" aria-label="Permainan baru">
+        <i class="fa fa-cog" aria-hidden="true"></i>
+        <span>Permainan Baru</span>
+      </button>
+      <div id="optionsOverlay" class="options-overlay"></div>
     </div>
-    <!-- app modal -->
-    <div id="modal" class="modal-vue">
-      <!-- overlay -->
-      <div class="overlay" v-if="showModal"></div>
-      <!-- modal -->
-      <div class="modal" v-if="showModal">
+
+    <!-- Game Setup Modal -->
+    <div id="modal" class="modal-vue" role="dialog" aria-labelledby="modal-title">
+      <div class="overlay" v-if="showModal" @click="closeModal()"></div>
+      <div class="modal" v-if="showModal" role="document">
         <div class='modalGrid center'>
           <div class="vs">
-            <img src="http://res.cloudinary.com/azametzin/image/upload/v1507661608/Tic-Tac-Toe/vs.png" />
+            <img src="http://res.cloudinary.com/azametzin/image/upload/v1507661608/Tic-Tac-Toe/vs.png" alt="Versus" />
           </div>
           <div class="options">
-            <h2>Pilihan</h2>
+            <h2 id="modal-title">Pilihan</h2>
           </div>
           <div class="box play1">Pemain 1</div>
           <div class="box play2">
-            <div id="player2">
-              <span id='selMarkPlayer2'>
+            <div id="player2" class="player-option">
+              <span id='selMarkPlayer2' class="selection-mark">
                 <i class="fa fa-caret-right" aria-hidden="true"></i>
-              </span>&nbsp;<span id="player2Select">Pemain 2</span>
+              </span>
+              <span id="player2Select">Pemain 2</span>
             </div>
-            <div id="cpu">
-              <span id='selMarkCPU'>
+            <div id="cpu" class="player-option">
+              <span id='selMarkCPU' class="selection-mark">
                 <i class="fa fa-caret-right" aria-hidden="true"></i>
-              </span>&nbsp;<span id="cpuSelect">Komputer</span>
+              </span>
+              <span id="cpuSelect">Komputer</span>
             </div>
           </div>
           <div class="box nick1">
-            <input id="nick1Input" type="text" name="nick1" placeholder="Nickname" maxlength="8" pattern="[a-zA-Z0-9-]+">
+            <input id="nick1Input" type="text" name="nick1" placeholder="Nickname" maxlength="8" pattern="[a-zA-Z0-9-]+" aria-label="Nickname pemain 1">
           </div>
           <div class="box nick2">
-            <input id="nick2Input" type="text" name="nick2" placeholder="Nickname" maxlength="8" pattern="[a-zA-Z0-9-]+">
+            <input id="nick2Input" type="text" name="nick2" placeholder="Nickname" maxlength="8" pattern="[a-zA-Z0-9-]+" aria-label="Nickname pemain 2">
           </div>
           <div class="sign1">
             <i class="fa fa-circle-o" aria-hidden="true"></i>
@@ -64,84 +76,73 @@
             <i class="fa fa-times" aria-hidden="true"></i>
           </div>
           <div class="exchangingAndOK">
-            <i id="exchangeBtn" class="fa fa-exchange" aria-hidden="true"></i><br><br>
-            <span id='okBtn' @click="okButtonClicked()">OKE</span>
+            <button id="exchangeBtn" class="exchange-btn" aria-label="Tukar simbol">
+              <i class="fa fa-exchange" aria-hidden="true"></i>
+            </button>
+            <br><br>
+            <button id='okBtn' class="ok-btn" @click="okButtonClicked()">OKE</button>
           </div>
         </div>
       </div>
     </div>
-    <section class="container">
+
+    <!-- Game Board -->
+    <section class="container" role="grid" aria-label="Papan permainan Tic Tac Toe">
       <div class="playerSide player1-Title">
-        <div id="player-1" class="title-players"></div>
+        <div id="player-1" class="title-players" role="banner"></div>
       </div>
-      <div class="item item-1">
-        <div id="square1" class="squares" data-mark="1"></div>
+      
+      <div class="item item-1" role="gridcell">
+        <div id="square1" class="squares" data-mark="1" tabindex="0" role="button" aria-label="Kotak 1"></div>
       </div>
-      <div class="item item-2">
-        <div id="square2" class="squares" data-mark="2"></div>
+      <div class="item item-2" role="gridcell">
+        <div id="square2" class="squares" data-mark="2" tabindex="0" role="button" aria-label="Kotak 2"></div>
       </div>
-      <div class="item item-3">
-        <div id="square3" class="squares" data-mark="3"></div>
+      <div class="item item-3" role="gridcell">
+        <div id="square3" class="squares" data-mark="3" tabindex="0" role="button" aria-label="Kotak 3"></div>
       </div>
+      
       <div class="playerSide player2-Title">
-        <div id="player-2" class="title-players"></div>
+        <div id="player-2" class="title-players" role="banner"></div>
       </div>
+      
       <div id="player1-info" class="playerSide player1-Avatar">
         <div id="player1-info-inside"></div>
       </div>
-      <div class="item item-4">
-        <div id="square4" class="squares" data-mark="4"></div>
+      <div class="item item-4" role="gridcell">
+        <div id="square4" class="squares" data-mark="4" tabindex="0" role="button" aria-label="Kotak 4"></div>
       </div>
-      <div class="item item-5">
-        <div id="square5" class="squares" data-mark="5"></div>
+      <div class="item item-5" role="gridcell">
+        <div id="square5" class="squares" data-mark="5" tabindex="0" role="button" aria-label="Kotak 5"></div>
       </div>
-      <div class="item item-6">
-        <div id="square6" class="squares" data-mark="6"></div>
+      <div class="item item-6" role="gridcell">
+        <div id="square6" class="squares" data-mark="6" tabindex="0" role="button" aria-label="Kotak 6"></div>
       </div>
       <div id="player2-info" class="playerSide player2-Avatar">
         <div id="player2-info-inside"></div>
       </div>
+      
       <div class="playerSide player1-Msg">
-        <div id="player-1-Msg" class="players-msg"></div>
+        <div id="player-1-Msg" class="players-msg" role="status" aria-live="polite"></div>
       </div>
-      <div class="item item-7">
-        <div id="square7" class="squares" data-mark="7"></div>
+      <div class="item item-7" role="gridcell">
+        <div id="square7" class="squares" data-mark="7" tabindex="0" role="button" aria-label="Kotak 7"></div>
       </div>
-      <div class="item item-8">
-        <div id="square8" class="squares" data-mark="8"></div>
+      <div class="item item-8" role="gridcell">
+        <div id="square8" class="squares" data-mark="8" tabindex="0" role="button" aria-label="Kotak 8"></div>
       </div>
-      <div class="item item-9">
-        <div id="square9" class="squares" data-mark="9"></div>
+      <div class="item item-9" role="gridcell">
+        <div id="square9" class="squares" data-mark="9" tabindex="0" role="button" aria-label="Kotak 9"></div>
       </div>
       <div class="playerSide player2-Msg">
-        <div id="player-2-Msg" class="players-msg"></div>
+        <div id="player-2-Msg" class="players-msg" role="status" aria-live="polite"></div>
       </div>
     </section>
-  </section>
+  </main>
+
+  <!-- Scripts -->
   <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.4/vue.min.js'></script>
   <script src="./script.js"></script>
-  <script>
-    // Menambahkan event listener saat dokumen HTML selesai dimuat
-    document.addEventListener('DOMContentLoaded', function () {
-      // Mengambil elemen tombol musik
-      var btnSound = document.getElementById('btnSound');
-
-      // Mendapatkan elemen audio
-      var audioElement = document.getElementById('playMusic');
-
-      // Menambahkan event listener saat tombol musik diklik
-      btnSound.addEventListener('click', function () {
-        // Memeriksa apakah audio sedang diputar atau dijeda
-        if (audioElement.paused) {
-          // Memulai pemutaran audio
-          audioElement.play();
-        } else {
-          // Jeda pemutaran audio
-          audioElement.pause();
-        }
-      });
-    });
-  </script>
 </body>
 </html>
